@@ -1,0 +1,24 @@
+<h3> Test Search Bar</h3>
+<input
+    type="text"
+    placeholder="Enter YouTube URL"
+    class="form-control"
+    (input) = "onAddressChange($event)">
+
+<button 
+    class = "btn btn-primary form-control"
+    [disabled] = "!allowPlay"
+    (click) = "onPressPlay()">
+    Play
+</button>
+
+<iframe
+    frameborder = "5"
+    height="400"
+    [src] = "videoAddress"
+>
+</iframe>
+
+<!-- src = {{ videoAddress }} -->
+<!-- https://www.youtube.com/watch?v=xHj0juUACFk -->
+<!-- https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1 -->
