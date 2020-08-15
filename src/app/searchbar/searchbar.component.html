@@ -14,6 +14,7 @@
 
 <iframe
     frameborder = "5"
+    width="100%" 
     height="400"
     [src] = "videoAddress"
 >
@@ -22,3 +23,27 @@
 <!-- src = {{ videoAddress }} -->
 <!-- https://www.youtube.com/watch?v=xHj0juUACFk -->
 <!-- https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1 -->
+
+
+<!-- HISTORY && BOOKMARKS -->
+<h2>History List</h2>
+<ul class="history">
+<li *ngFor="let historyItem of historyList"
+    [class.selected]="historyItem === urlInput"
+    (click)="onSelect(historyItem)">
+    <!-- <span class="badge">{{hero.id}}</span>  -->
+    {{historyItem}}
+</li>
+</ul>
+
+<!-- <div *ngIf="selectedHero">
+
+    <h2>{{selectedHero.name | uppercase}} Details</h2>
+    <div><span>id: </span>{{selectedHero.id}}</div>
+    <div>
+        <label>name:
+        <input [(ngModel)]="selectedHero.name" placeholder="name"/>
+        </label>
+    </div>
+
+</div> -->
