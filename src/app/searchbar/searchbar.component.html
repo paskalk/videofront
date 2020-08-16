@@ -1,15 +1,17 @@
-<h3> Test Search Bar</h3>
+
 <input
     type="text"
     placeholder="Enter YouTube URL"
     class="form-control"
-    (input) = "onAddressChange($event)">
+    (input) = "onAddressChange($event)"
+    [(ngModel)]="originalUrl"
+    />
 
-<button 
+<!-- <button 
     class = "btn btn-primary form-control"
     [disabled] = "!allowPlay"
     (click) = "onPressPlay()">
-    Play
+    Load
 </button>
 
 <iframe
@@ -17,33 +19,26 @@
     width="100%" 
     height="400"
     [src] = "videoAddress"
+    allowfullscreen = 'true'
 >
-</iframe>
+</iframe> -->
 
-<!-- src = {{ videoAddress }} -->
-<!-- https://www.youtube.com/watch?v=xHj0juUACFk -->
-<!-- https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1 -->
+<!-- <app-video-view
+    [urlInput] = "urlInput"
+>
+</app-video-view>
+
+<app-bookmarks 
+    [urlInput] = "urlInput"
+    [originalUrl] = "originalUrl"
+>
+</app-bookmarks>
+
+<app-history
+    [originalUrl] = "originalUrl"
+></app-history>
+ -->
 
 
-<!-- HISTORY && BOOKMARKS -->
-<h2>History List</h2>
-<ul class="history">
-<li *ngFor="let historyItem of historyList"
-    [class.selected]="historyItem === urlInput"
-    (click)="onSelect(historyItem)">
-    <!-- <span class="badge">{{hero.id}}</span>  -->
-    {{historyItem}}
-</li>
-</ul>
 
-<!-- <div *ngIf="selectedHero">
 
-    <h2>{{selectedHero.name | uppercase}} Details</h2>
-    <div><span>id: </span>{{selectedHero.id}}</div>
-    <div>
-        <label>name:
-        <input [(ngModel)]="selectedHero.name" placeholder="name"/>
-        </label>
-    </div>
-
-</div> -->

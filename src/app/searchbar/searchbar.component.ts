@@ -1,5 +1,7 @@
-import { Component, OnInit, SecurityContext } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl, } from '@angular/platform-browser';
+
+
 @Component({
     selector: 'app-searchbar',
     templateUrl: './searchbar.component.html',
@@ -7,11 +9,20 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl, } from '@angular/platform-brows
 })
 export class SearchbarComponent implements OnInit {
 
-    urlInput = '';
+    // originalUrl = '';
+    // urlInput = '';
+    
+    // public videoAddress: SafeUrl;
+    // public urlInput: SafeUrl;
+
+    @Input() originalUrl: string;
+    @Input() urlInput: SafeUrl;
+
     allowPlay = false;
-    public videoAddress: SafeUrl;
 
     historyList = this.getFromLocalStorage("history");
+    bookmarksList = this.getFromLocalStorage("bookmarks");
+    
     
  
 
@@ -24,37 +35,38 @@ export class SearchbarComponent implements OnInit {
     }
 
     onAddressChange(event: Event) {
-        this.urlInput = (<HTMLInputElement>event.target).value;
+        this.originalUrl = (<HTMLInputElement>event.target).value;
         
-        if (this.urlInput !== ""){
+        if (this.originalUrl && this.originalUrl.trim() !== ""){
             this.allowPlay = true;
+
+            
+
+            let videoId = this.convertURL(this.originalUrl.trim());
+            this.saveToLocalStorage("history", videoId);
+            let newUrl = `https://www.youtube.com/embed/${videoId}`;
+            this.urlInput = this.sanitizer.bypassSecurityTrustResourceUrl(newUrl);
         }
         
     }
 
     convertURL(url){
-            var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            var match = url.match(regExp);
-            
-            if (match && match[2].length == 11) {
-                return match[2];
-            } else {
-                console.log('Invalid input entered.')
-                return 'zWh3CShX_do';
-            }
+        var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        var match = url.match(regExp);
+        
+        if (match && match[2].length == 11) {
+            return match[2];
+        } else {
+            console.log('Invalid input entered.')
+            return 'zWh3CShX_do';
+        }
     }
 
-    onPressPlay(){
-        
-        this.saveToLocalStorage("history", this.urlInput.trim());
-        let newUrl = `https://www.youtube.com/embed/${this.convertURL(this.urlInput.trim())}`;
-        this.videoAddress = this.sanitizer.bypassSecurityTrustResourceUrl(newUrl);
-        // this.videoAddress = this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.sanitizer.bypassSecurityTrustResourceUrl(this.urlInput));
-        //  alert(this.videoAddress);
-
-        //
-        
-    }
+    // onPressPlay(){
+    //     this.saveToLocalStorage("history", this.urlInput.trim());
+    //     let newUrl = `https://www.youtube.com/embed/${this.convertURL(this.urlInput.trim())}`;
+    //     this.videoAddress = this.sanitizer.bypassSecurityTrustResourceUrl(newUrl);
+    // }
 
 
     saveToLocalStorage(key, value){
@@ -74,12 +86,14 @@ export class SearchbarComponent implements OnInit {
 
 
 
-    onSelect(historyItem) {
-        // alert(historyItem);
-        // this.selectedHistoryItem = historyItem;
-        this.urlInput = historyItem;
-        this.onPressPlay();
-    }
+    // onSelect(historyItem) {
+    //     this.urlInput = historyItem;
+    //     // this.onPressPlay();
+    // }
+
+    // addBookmark(){
+    //     alert('add bookmark clicked');
+    // }
 
 
 }

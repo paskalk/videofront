@@ -1,1 +1,24 @@
-<p>bookmarks works!</p>
+<button 
+    class = "btn btn-primary form-control"
+    [disabled] = "!allowPlay"
+    (click) = "addBookmark()">
+    Add BookMark
+</button>
+
+<button 
+    class = "btn btn-primary form-control"
+    (click) = "showBookmarks()">
+    Toggle Bookmarks List
+</button>
+
+<div *ngIf="bookmarksVisible">
+    <h2>Bookmarks List</h2>
+    <ul class="history">
+        <li *ngFor="let bookmarkItem of bookmarksList"
+            [class.selected]="bookmarkItem === urlInput"
+            (click)="onSelect(bookmarkItem)">
+            <!-- <span class="badge">{{hero.id}}</span>  -->
+            {{bookmarkItem}}
+        </li>
+    </ul>
+</div>

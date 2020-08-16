@@ -1,7 +1,19 @@
-<app-searchbar></app-searchbar>
+<app-searchbar
+    [urlInput] = "urlInput"
+    [originalUrl] = "originalUrl"
+></app-searchbar>
 
-<app-video-view></app-video-view>
+<app-video-view
+    [urlInput] = "urlInput"
+>
+</app-video-view>
 
-<app-history></app-history>
+<app-bookmarks 
+    [urlInput] = "urlInput"
+    [originalUrl] = "originalUrl"
+>
+</app-bookmarks>
 
-<app-bookmarks></app-bookmarks>
+<app-history
+    [originalUrl] = "originalUrl"
+></app-history>
