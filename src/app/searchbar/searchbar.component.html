@@ -1,43 +1,14 @@
 
-<input
+<input #txtUrlInput
     type="text"
-    placeholder="Enter YouTube URL"
+    placeholder="Paste a YouTube URL and hit enter"
     class="form-control"
     (input) = "onAddressChange($event)"
-    [(ngModel)]="originalUrl"
-    />
+    (keyup.enter)="onEnterOrBlur(txtUrlInput.value)"      
+    (blur)="onEnterOrBlur(txtUrlInput.value)"
+    [(ngModel)]="urlInput"
+/>
 
-<!-- <button 
-    class = "btn btn-primary form-control"
-    [disabled] = "!allowPlay"
-    (click) = "onPressPlay()">
-    Load
-</button>
-
-<iframe
-    frameborder = "5"
-    width="100%" 
-    height="400"
-    [src] = "videoAddress"
-    allowfullscreen = 'true'
->
-</iframe> -->
-
-<!-- <app-video-view
-    [urlInput] = "urlInput"
->
-</app-video-view>
-
-<app-bookmarks 
-    [urlInput] = "urlInput"
-    [originalUrl] = "originalUrl"
->
-</app-bookmarks>
-
-<app-history
-    [originalUrl] = "originalUrl"
-></app-history>
- -->
 
 
 

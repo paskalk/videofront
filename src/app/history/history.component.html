@@ -1,9 +1,17 @@
+<div class="container">
+    <div class="row">
 
-<h2>History List</h2>
-    <ul class="history">
-    <li *ngFor="let historyItem of historyList"
-        [class.selected]="historyItem === urlInput"
-        (click)="onSelect(historyItem)">
-        {{historyItem}}
-    </li>
-</ul>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h2>History List</h2>
+            <ul class="history">
+                <li *ngFor="let historyItem of historyList"
+                    [class.selected]="historyItem === urlInput"
+                    (click)="onSelect(historyItem)">
+                    {{historyItem}}
+                </li>
+            </ul>
+        </div>
+    </div>    
+</div>

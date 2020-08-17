@@ -1,48 +1,46 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
+import { UrlhistoryService } from '../urlhistory.service';
 
 @Component({
   selector: 'app-bookmarks',
   templateUrl: './bookmarks.component.html',
   styleUrls: ['./bookmarks.component.css']
 })
-export class BookmarksComponent implements OnInit {
-  @Input()  urlInput: String;
-  @Input()  originalUrl: string;
+export class BookmarksComponent implements OnInit, OnChanges {
+  @Input()  urlInput: string;
+  @Output() urlToPlay = new EventEmitter<string>();
 
-  allowPlay = true;
+  enableAdd = false;
   bookmarksVisible = false;
+  bookmarksList = [];
+  bookmarksCount = 0;
 
-  bookmarksList = this.getFromLocalStorage("bookmarks");
-
-  constructor() { }
+  constructor(private _urlhistoryService: UrlhistoryService){ }
 
   ngOnInit(): void {
+    this.bookmarksList = this._urlhistoryService.getFromLocalStorage("bookmarks");
+    this.bookmarksCount = this.bookmarksList.length;
+  }
+
+  ngOnChanges(changes: SimpleChanges){
+    if (this.urlInput && this.urlInput !== ""){
+      this.enableAdd = true;
+    } else {
+      this.enableAdd = false;
+    }
   }
 
   onSelect(historyItem) {
-    this.urlInput = historyItem;
+    this.urlToPlay.emit(historyItem);
   } 
 
   addBookmark(){
-    this.saveToLocalStorage("bookmarks", this.originalUrl);
+    this._urlhistoryService.saveToLocalStorage("bookmarks", this.urlInput);
+    this.bookmarksList = this._urlhistoryService.getFromLocalStorage("bookmarks");
+    this.bookmarksCount = this.bookmarksList.length;
   }
 
   showBookmarks(){
     this.bookmarksVisible = this.bookmarksVisible === false ? true : false;
   }
-
-  getFromLocalStorage(key){
-    let list = JSON.parse(localStorage.getItem(key)) || [];
-    return list;
-  }
-
-  saveToLocalStorage(key, value){
-    let list = this.getFromLocalStorage(key);
-    if (!list.includes(value)){
-        list.push(value);
-    }
-    
-    localStorage.setItem(key, JSON.stringify(list));
-}
-
 }

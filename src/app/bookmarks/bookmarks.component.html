@@ -1,24 +1,38 @@
-<button 
-    class = "btn btn-primary form-control"
-    [disabled] = "!allowPlay"
-    (click) = "addBookmark()">
-    Add BookMark
-</button>
+<div class="container">
+    <div class="row sides-height">
+        <div class="col">
+            <button 
+                class = "btn btn-secondary"
+                [disabled] = "!enableAdd"
+                (click) = "addBookmark()">
+                Add BookMark
+            </button>
+        </div>
+        <div class="col">
+            <button 
+                type="button" 
+                class="btn btn-secondary  float-right" 
+                data-toggle="button" 
+                [attr.aria-pressed] = "!bookmarksVisible" 
+                (click) = "showBookmarks()">
+                Toggle Bookmarks
+                <span class="badge badge-light">
+                    {{bookmarksCount}}
+                </span>
+            </button>
+        </div>
+    </div>
 
-<button 
-    class = "btn btn-primary form-control"
-    (click) = "showBookmarks()">
-    Toggle Bookmarks List
-</button>
-
-<div *ngIf="bookmarksVisible">
-    <h2>Bookmarks List</h2>
-    <ul class="history">
-        <li *ngFor="let bookmarkItem of bookmarksList"
-            [class.selected]="bookmarkItem === urlInput"
-            (click)="onSelect(bookmarkItem)">
-            <!-- <span class="badge">{{hero.id}}</span>  -->
-            {{bookmarkItem}}
-        </li>
-    </ul>
+    <div class="row">
+        <div class="col" *ngIf="bookmarksVisible">
+            <h2>Bookmarks List</h2>
+            <ul class="history">
+                <li *ngFor="let bookmarkItem of bookmarksList"
+                    [class.selected]="bookmarkItem === originalUrl"
+                    (click)="onSelect(bookmarkItem)">
+                    {{bookmarkItem}}
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>

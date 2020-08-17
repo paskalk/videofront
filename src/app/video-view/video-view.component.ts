@@ -1,52 +1,60 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges  } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange  } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl, } from '@angular/platform-browser';
+import { UrlhistoryService } from '../urlhistory.service';
 
 @Component({
   selector: 'app-video-view',
   templateUrl: './video-view.component.html',
   styleUrls: ['./video-view.component.css']
 })
-export class VideoViewComponent implements OnInit {
+export class VideoViewComponent implements OnInit, OnChanges {
 
-  @Input()  urlInput: SafeUrl;
-  // public videoAddress: SafeUrl;
+  @Input()  urlInput: string;
+  @Input()  historyList: Array<string>;
+  urlToPlay: SafeUrl;
 
-  // @Output() url = new EventEmitter<string>();
   allowPlay = false;
 
-  constructor(public sanitizer: DomSanitizer){
-    
-  }
-
-
+  constructor(private sanitizer: DomSanitizer, private _urlhistoryService: UrlhistoryService){ }
 
   ngOnInit(): void {
     
   }
 
-  // ngOnChanges(changes: SimpleChanges):void {
-  //   // alert('changeFelt');
-  // }
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.urlInput && this.urlInput !== ""){
 
+      this._urlhistoryService.saveToLocalStorage("history", this.urlInput);
+      
+      let videoId = this.convertURL(this.urlInput);      
+      let newUrl = `https://www.youtube.com/embed/${videoId}`;
 
-  // onPressPlay(){
-        
-  //   // this.saveToLocalStorage("history", this.urlInput.trim());
-  //   let newUrl = `https://www.youtube.com/embed/${this.convertURL(this.urlInput.trim())}`;
-  //   this.videoAddress = this.sanitizer.bypassSecurityTrustResourceUrl(newUrl);
-  // } 
+      this._urlhistoryService.saveToDatabase(newUrl)
+          .subscribe(data => {
+            console.log('received ..... ', data);
+            if (this.historyList){
+              this.historyList.unshift(this.urlInput);
+            } 
+            
+            
+          });
 
-  // convertURL(url){
-  //   var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  //   var match = url.match(regExp);
+      this.urlToPlay = this.sanitizer.bypassSecurityTrustResourceUrl(newUrl);
+    }    
+  }
+
+  convertURL(url){
+    console.log('++++++', url);
+    var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
     
-  //   if (match && match[2].length == 11) {
-  //       return match[2];
-  //   } else {
-  //       console.log('Invalid input entered.')
-  //       return 'zWh3CShX_do';
-  //   }
-  // }
+    if (match && match[2].length == 11) {
+        return match[2];
+    } else {
+        console.log('Invalid input entered.')
+        return 'zWh3CShX_do';
+    }
+  }
 
 }
 
