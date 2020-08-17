@@ -12,7 +12,6 @@
         <div class="col-12 col-md-4">
             <app-history
                 [urlInput] = "urlInput"
-                [historyList] = "historyList"
                 (urlToPlay)="onUrlReady($event)"
             ></app-history>
         </div>
@@ -24,7 +23,6 @@
             
             <app-video-view
                 [urlInput] = "urlInput"
-                (updatedList)="onListUpdated($event)"
             ></app-video-view>
         </div>
         <div class="col-12 col-md-4">

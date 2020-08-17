@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange  } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl, SafeUrl, } from '@angular/platform-browser';
+import { Component, OnInit, Input, Output, OnChanges, SimpleChanges, SimpleChange  } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl, } from '@angular/platform-browser';
 import { UrlhistoryService } from '../urlhistory.service';
 
 @Component({
@@ -10,8 +10,7 @@ import { UrlhistoryService } from '../urlhistory.service';
 export class VideoViewComponent implements OnInit, OnChanges {
 
   @Input()  urlInput: string;
-  @Input()  historyList: Array<string>;
-  urlToPlay: SafeUrl;
+  urlToPlay: SafeResourceUrl;
 
   allowPlay = false;
 
@@ -29,29 +28,24 @@ export class VideoViewComponent implements OnInit, OnChanges {
       let videoId = this.convertURL(this.urlInput);      
       let newUrl = `https://www.youtube.com/embed/${videoId}`;
 
-      this._urlhistoryService.saveToDatabase(newUrl)
-          .subscribe(data => {
-            console.log('received ..... ', data);
-            if (this.historyList){
-              this.historyList.unshift(this.urlInput);
-            } 
-            
-            
-          });
+      this._urlhistoryService.saveToDatabase(this.urlInput)
+          .subscribe(data => console.log(data));
 
       this.urlToPlay = this.sanitizer.bypassSecurityTrustResourceUrl(newUrl);
+
+      // //Use this to fix the unsafe error
+      // this.urlToPlay = newUrl;
     }    
   }
 
   convertURL(url){
-    console.log('++++++', url);
     var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     var match = url.match(regExp);
     
     if (match && match[2].length == 11) {
         return match[2];
     } else {
-        console.log('Invalid input entered.')
+        console.log('Invalid input entered.');
         return 'zWh3CShX_do';
     }
   }

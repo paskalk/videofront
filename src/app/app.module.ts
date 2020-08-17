@@ -10,6 +10,7 @@ import { BookmarksComponent } from './bookmarks/bookmarks.component';
 import { FormsModule } from '@angular/forms';
 import { UrlhistoryService } from './urlhistory.service';
 import { HttpClientModule } from '@angular/common/http';
+import { SafePipe } from './safe.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
     SearchbarComponent,
     VideoViewComponent,
     HistoryComponent,
-    BookmarksComponent
+    BookmarksComponent,
+    SafePipe
   ],
   imports: [
     BrowserModule,

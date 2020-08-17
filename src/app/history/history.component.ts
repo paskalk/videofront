@@ -1,20 +1,36 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { UrlhistoryService } from '../urlhistory.service';
 
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
 })
-export class HistoryComponent implements OnInit {
+export class HistoryComponent implements OnInit, OnChanges {
   @Input()  urlInput: string;
-  @Input()  historyList: Array<string>;
   @Output() urlToPlay = new EventEmitter<string>();
+
+  historyList = [];
 
   constructor(private _urlhistoryService: UrlhistoryService){ }
 
   ngOnInit(): void {
-    // this.historyList = this._urlhistoryService.getFromLocalStorage("history");
+    // Load from localStorage as we wait for API call
+    this.historyList = this._urlhistoryService.getFromLocalStorage("history");
 
+    this.updateHistory();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.urlInput && this.urlInput !== ""){
+      this.updateHistory();  
+    }
+  }
+
+  onSelect(historyItem) {
+    this.urlToPlay.emit(historyItem);
+  }
+
+  updateHistory(){ 
     this._urlhistoryService.getHistoryFromDatabase()
       .subscribe( data => {
         let arr = [];
@@ -28,10 +44,6 @@ export class HistoryComponent implements OnInit {
 
         localStorage.setItem("history", JSON.stringify(this.historyList));
       });
-  }
-
-  onSelect(historyItem) {
-    this.urlToPlay.emit(historyItem);
   }
 
 
